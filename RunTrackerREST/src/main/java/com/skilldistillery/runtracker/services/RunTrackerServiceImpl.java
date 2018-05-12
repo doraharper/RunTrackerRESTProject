@@ -2,6 +2,7 @@ package com.skilldistillery.runtracker.services;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,12 @@ public class RunTrackerServiceImpl implements RunTrackerService {
 
 	@Override
 	public Run getRunById(int id) {
-		return runRepo.findById(id).get();
+		Optional<Run> r = runRepo.findById(id);
+		if(r.isPresent()) {
+			return (Run)r.get();
+		}
+		return null;
+		 
 	}
 
 	@Override
@@ -95,7 +101,12 @@ public class RunTrackerServiceImpl implements RunTrackerService {
 
 	@Override
 	public boolean delete(int id) {
-		 runRepo.deleteById(id);
-		 return true;
+		try { 
+			runRepo.deleteById(id);
+			return true;
+		}catch(Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }
