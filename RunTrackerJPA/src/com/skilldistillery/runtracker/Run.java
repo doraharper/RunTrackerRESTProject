@@ -17,11 +17,11 @@ public class Run {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	
 	private String name;
 	
-	private int age;
+	private Integer age;
 	
 	@CreationTimestamp
 	@Temporal(TemporalType.DATE)
@@ -31,28 +31,18 @@ public class Run {
 	private double distanceInMiles;
 	
 	@Column(name="total_time_in_minutes")
-	private int timeInMin;
+	private Integer timeInMin;
 	
-//Constructors	
 	
-	public Run() {}
 	
 
-	public Run(int id, String name, int age, Date date, double distanceInMiles, int timeInMin) {
-	super();
-	this.id = id;
-	this.name = name;
-	this.age = age;
-	this.date = date;
-	this.distanceInMiles = distanceInMiles;
-	this.timeInMin = timeInMin;
-}
 
-
-// Getters and Setters	
-	
-	public int getId() {
+	public Integer getId() {
 		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -63,11 +53,11 @@ public class Run {
 		this.name = name;
 	}
 
-	public int getAge() {
+	public Integer getAge() {
 		return age;
 	}
 
-	public void setAge(int age) {
+	public void setAge(Integer age) {
 		this.age = age;
 	}
 
@@ -87,13 +77,15 @@ public class Run {
 		this.distanceInMiles = distanceInMiles;
 	}
 
-	public int getTimeInMin() {
+	public Integer getTimeInMin() {
 		return timeInMin;
 	}
 
-	public void setTimeInMin(int timeInMin) {
+	public void setTimeInMin(Integer timeInMin) {
 		this.timeInMin = timeInMin;
 	}
 	
-
+//Constructors	
+	
+	
 }

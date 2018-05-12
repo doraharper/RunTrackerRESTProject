@@ -38,4 +38,13 @@ public class RunTrackerController {
 	public Run create(@RequestBody String jsonRun) {
 		return runSer.create(jsonRun);
 	}
+	
+	@RequestMapping(path="runs/{id}", method=RequestMethod.PUT)
+	public Run replace(@RequestBody String jsonRun, @PathVariable Integer id) {
+		return runSer.replace(jsonRun, id);
+	}
+	@RequestMapping(path="runs/{id}", method=RequestMethod.PATCH)
+	public Run update(@RequestBody String jsonRun, @PathVariable Integer id) {
+		return runSer.update(jsonRun, id);
+	}
 }

@@ -51,8 +51,27 @@ public class RunTrackerServiceImpl implements RunTrackerService {
 
 	@Override
 	public Run update(String jsonRun, int id) {
+		Run r = runRepo.findById(id).get();
+		ObjectMapper mapper = new ObjectMapper();
 		
-		return null;
+		try {
+			Run updated = mapper.readValue(jsonRun, Run.class);
+			if (updated.getName() != null && !updated.getName().equals("")) {
+				r.setName(updated.getName());
+			}
+			if (updated.getAge() != null && !updated.getAge().equals("")) {
+				r.setAge(updated.getAge());
+			}
+			if(updated.getDistanceInMiles() != 0) {
+				r.setDistanceInMiles(updated.getDistanceInMiles());
+			}
+			if(updated.getTimeInMin() != 0) {
+				r.setTimeInMin(updated.getTimeInMin());
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return r;
 	}
 
 	@Override
