@@ -77,6 +77,7 @@ public class RunTrackerServiceImpl implements RunTrackerService {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		runRepo.saveAndFlush(r);
 		return r;
 	}
 
@@ -96,6 +97,7 @@ public class RunTrackerServiceImpl implements RunTrackerService {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+		runRepo.saveAndFlush(r);
 		return r;
 	}
 
