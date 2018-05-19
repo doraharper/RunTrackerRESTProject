@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Run Tracker</title>
+<script src="js/script.js"></script>
+</head>
+<body>
+<h1>Track your run!</h1>
+<form name="runForm">
+    <input type="number" name="runId">
+    <button name="lookup">Get Run by Id</button>
+  </form>
+  <div id="output"></div>
+  <div id="runData"></div>
+  <div id="runIndex"></div>
+ <div>
+	<form name="createRun"><hr>
+		<input type="text" name="name" placeholder="Name">
+		<input type="text" name="age" placeholder="Age"><br>
+		<input type="number" name="distanceInMiles" placeholder="Distance in miles">
+		<input type="number" name="timeInMin" placeholder="Time in minutes"><br>
+	
+    	<button name="create">Log Run</button>
+	</form>
+</div>	
+</body>
+</html>
