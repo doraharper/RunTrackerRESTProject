@@ -37,29 +37,69 @@ function getRun(runId){
 	};
 	xhr.send(null);
 }
+function deleteRun(runId){
+	var xhr = new XMLHttpRequest();
+	xhr.open('DELETE', 'api/runs/' + runId, true);
+	xhr.onreadystatechange = function(){
+		if(this.readyState === 4){
+			if(this.status === 200){
+				var runJSON = this.responseText;
+				var runObj = JSON.parse(runJSON);
+				displayRun(runObj);
+				console.log(runObj);
+			}
+			else{
+				displayRunNotFound(runId);
+			}
+		}
+		
+	};
+	xhr.send(null);
+}
+function updateRun(runId){
+	
+	var xhr = new XMLHttpRequest();
+	xhr.open('PATCH', 'api/runs/' + runId, true);
+	xhr.onreadystatechange = function(){
+		if(this.readyState === 4){
+			if(this.status === 200){
+				var runJSON = this.responseText;
+				var runObj = JSON.parse(runJSON);
+				displayRun(runObj);
+				console.log(runObj);
+			}
+			else{
+				console.error(xhr.status + ': ' + xhr.responseText);
+			}
+		}
+		
+	};
+	xhr.send(runJson);
+}
 
 function displayRun(run){
 	var runDiv = document.getElementById('runData');
 	runDiv.textContent = '';
-//	console.log(run)
 	
 	var name = document.createElement('h1');
 	var age = document.createElement('h3');
 	var date = document.createElement('p');
 	var time = document.createElement('p');
 	var distance = document.createElement('p');
+	var del = document.createElement('button');
 	
 	name.textContent = run.name;
 	age.textContent = "Age: "+ run.age;
 	date.textContent = "Date created: " + run.date;
 	distance.textContent = "Distance in miles: " + run.distanceInMiles;
 	time.textContent = "Time in minutes: " + run.timeInMin;
-	
+
 	runDiv.appendChild(name);
 	runDiv.appendChild(age);
 	runDiv.appendChild(date);
 	runDiv.appendChild(distance);
 	runDiv.appendChild(time);
+	
 	
 }
 
@@ -91,7 +131,7 @@ function sendNewRun(evt){
 		      displayRun(newRun);
 		    }
 	        else {
-		        // display error or something
+	        	console.error(xhr.status + ': ' + xhr.responseText);
 	        }
 	    }
   }; 	 
