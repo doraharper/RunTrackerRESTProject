@@ -15,6 +15,8 @@ function init() {
 	
 	document.newRun.save.addEventListener('click', sendNewRun);
 	
+
+	
 	loadRunIndex();
 }
 
@@ -37,9 +39,10 @@ function getRun(runId){
 	};
 	xhr.send(null);
 }
-function deleteRun(runId){
+function deleteRun(run){
+	
 	var xhr = new XMLHttpRequest();
-	xhr.open('DELETE', 'api/runs/' + runId, true);
+	xhr.open('DELETE', 'api/runs/' + run.id, true);
 	xhr.onreadystatechange = function(){
 		if(this.readyState === 4){
 			if(this.status === 200){
@@ -55,18 +58,30 @@ function deleteRun(runId){
 		
 	};
 	xhr.send(null);
+	location.reload();
 }
-function updateRun(runId){
+function updateRun(evt){
+	evt.preventDefault();
+	var form = document.updateForm;
+	var run = {
+			name: form.name.value,
+			age: form.age.value,
+			distanceInMiles: form.distanceInMiles.value,
+			timeInMin: form.timeInMin.value
+			
+	};
+	var runJson = JSON.stringify(run);
+	
 	
 	var xhr = new XMLHttpRequest();
-	xhr.open('PATCH', 'api/runs/' + runId, true);
+	xhr.open('PATCH', 'api/runs/' + form.runId.value, true);
 	xhr.onreadystatechange = function(){
 		if(this.readyState === 4){
 			if(this.status === 200){
-				var runJSON = this.responseText;
-				var runObj = JSON.parse(runJSON);
-				displayRun(runObj);
-				console.log(runObj);
+				  var newRunJson = this.responseText;
+			      var newRun = JSON.parse(runJson);
+				
+				console.log("success");
 			}
 			else{
 				console.error(xhr.status + ': ' + xhr.responseText);
@@ -75,6 +90,68 @@ function updateRun(runId){
 		
 	};
 	xhr.send(runJson);
+}
+
+function updateForm(run){
+	console.log(run);
+	var runDiv = document.getElementById('runData');
+	var form = document.createElement('form');
+	var distanceInput = document.createElement('input');
+	var distanceLabel = document.createElement('label');
+	var nameInput = document.createElement('input');
+	var nameLabel = document.createElement('lable');
+	var timeInput = document.createElement('input');
+	var timeLabel = document.createElement('lable');
+	var ageInput = document.createElement('input');
+	var ageLabel = document.createElement('lable');
+	var br = document.createElement('br');
+	var hr = document.createElement('hr');
+	var submit = document.createElement('button');
+	var id = document.createElement('input');
+	
+	form.name = "updateForm";
+	id.name = "runId";
+	id.type = "hidden";
+	id.value = run.id;
+	
+	ageInput.name = "age"
+	ageInput.value = run.age;
+	ageLabel.textContent = "Age ";
+	
+	nameInput.name = "name";
+	nameInput.value = run.name;
+	nameLabel.textContent = "Name "
+	
+	timeInput.name = "timeInMin";
+	timeInput.value = run.timeInMin;
+	timeLabel.textContent = "Time in Minutes ";
+	
+	distanceInput.name = "distanceInMiles";
+	distanceInput.value = run.distanceInMiles;
+	distanceLabel.textContent = "Distance in Miles ";
+	submit.textContent = "update";
+	
+	submit.addEventListener('click', updateRun);
+	
+	form.appendChild(nameLabel);
+	form.appendChild(nameInput);
+	nameInput.appendChild(br);
+	form.appendChild(ageLabel);
+	form.appendChild(ageInput);
+	form.appendChild(br);
+	form.appendChild(distanceLabel);
+	form.appendChild(distanceInput);
+	form.appendChild(br);
+	form.appendChild(timeLabel);
+	form.appendChild(timeInput);
+	form.appendChild(hr);
+	form.appendChild(submit);
+	form.appendChild(id);
+	runDiv.appendChild(form);
+	
+	
+
+	
 }
 
 function displayRun(run){
@@ -87,21 +164,52 @@ function displayRun(run){
 	var time = document.createElement('p');
 	var distance = document.createElement('p');
 	var del = document.createElement('button');
+	var update = document.createElement('button');
+	var hr = document.createElement('hr');
+	var id = document.createElement('input');
 	
+	id.name = "runId";
+	id.type = "hidden";
+	id.value = run.id;
 	name.textContent = run.name;
 	age.textContent = "Age: "+ run.age;
 	date.textContent = "Date created: " + run.date;
 	distance.textContent = "Distance in miles: " + run.distanceInMiles;
 	time.textContent = "Time in minutes: " + run.timeInMin;
+	del.textContent = "Delete";
+	update.textContent = "Update";
+	
+	del.addEventListener('click', function(){
+		console.log("delete button clicked");	
+		deleteRun(run);
+		
+	});
+		
+		
+	
+	update.addEventListener('click', function(){
+		console.log("update button clicked")
+		var runDiv = document.getElementById('runData');
+		runDiv.textContent ='';
+		
+		updateForm(run);
+		
+	});
 
 	runDiv.appendChild(name);
 	runDiv.appendChild(age);
 	runDiv.appendChild(date);
 	runDiv.appendChild(distance);
 	runDiv.appendChild(time);
+	runDiv.appendChild(del);
+	runDiv.appendChild(update);
+	runDiv.appendChild(id);
+	runDiv.appendChild(hr);
+
 	
-	
+//	document.runData.deleted.addEventListener('click', deleteRun);
 }
+
 
 function displayRunNotFound(runId){
 	var runDiv = document.getElementById('runData');
@@ -162,10 +270,12 @@ function displayRunIndex(runs){
  table.appendChild(thead);
  var th = document.createElement('th');
  thead.appendChild(th);
- th.textContext = "User Name";
+ th.textContent = "User Name";
  
  console.log(runs);
+ var counter = 0;
  runs.forEach(function(run){
+	 counter += 1;
 	 var tr = document.createElement('tr');
 	 tr.runId = run.id;
 	 thead.appendChild(tr);
@@ -182,5 +292,8 @@ function displayRunIndex(runs){
 		 }
 	 });
  });
+ 	var tr = document.createElement('h3');
+ 	tr.textContent = "Total runs: " + counter + ".";
+ 	div.appendChild(tr);
 } 
 
